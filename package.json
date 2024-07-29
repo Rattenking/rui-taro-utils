@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "use taro react!",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "src"
+  ],
+  "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,5 +15,13 @@
     "utils"
   ],
   "author": "Rattenking",
+  "homepage": "https://github.com/Rattenking/rui-taro-utils.git",
+  "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Rattenking/rui-taro-utils.git"
+  },
+  "publishConfig": {
+      "registry": "https://registry.npmjs.org/"
+  },
   "license": "ISC"
 }
