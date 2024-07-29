@@ -3,7 +3,7 @@ import {
   getBarCode,
   getQrCode
 } from './src/code';
-import { axios } from './src/request';
+import axios from './src/request';
 
 export { 
   axios, 
