@@ -50,8 +50,8 @@ export const mergeConfig = (obj1, obj2) => {
     if(['url','baseURL','method'].includes(k)){
       t[k] = source[k]
     }
-    if(['headers'].includes(k)){
-      t[k] = Object.assign({},source[k],t[k])
+    if(['headers', 'data'].includes(k)){
+      t[k] = Object.assign({},t[k],source[k])
     }
     return t;
   },target)

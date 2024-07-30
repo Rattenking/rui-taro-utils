@@ -11,17 +11,6 @@ class Axios{
       response : new Interceptor()
     }
   }
-  get (url,config={}) {
-    config.method = 'GET';
-    config.url = url;
-    return this.request(config);
-  }
-  post (url, data = {}, config={}){
-    config.method = 'POST';
-    config.url = url;
-    config.data = data;
-    return this.request(config);
-  }
   create (config) {
     return new Axios(config);
   }
@@ -39,7 +28,7 @@ class Axios{
     });
     
     //数据请求
-    promise = promise.then(this.send)
+    promise = promise.then(config.method === 'UPLOAD' ? this.uploadFile :  this.send)
     
     //相应拦截器，遍历 interceptors.response 里的处理函数
     let responseHandlers = this.interceptors.response.handlers;
@@ -60,10 +49,58 @@ class Axios{
         timeout: configs.timeout,
         method: configs.method,
         data: configs.data,
-        success: resolve,
-        fail: reject
+        success: res => {
+          res.config = configs;
+          resolve(res)
+        },
+        fail: err => {
+          err.config = configs;
+          reject(err)
+        }
       })
     })
   }
+  uploadFile(configs){
+    return new Promise((resolve, reject) => {
+      Taro.uploadFile({
+        url: configs.baseURL + configs.url,
+        header: {
+          ...configs.headers
+        },
+        timeout: configs.timeout,
+        filePath: configs.data.filePath,
+        name: 'file',
+        formData: configs.data,
+        success: res => {
+          res.config = configs;
+          resolve(res)
+        },
+        fail: err => {
+          err.config = configs;
+          reject(err)
+        }
+      })
+    })
+  }
+}
+
+Axios.prototype.get = function get(url,config={}) {
+  config.method = 'GET';
+  config.url = url;
+  return this.request(config);
+}
+
+Axios.prototype.post = function post(url, data = {}, config={}){
+  config.method = 'POST';
+  config.url = url;
+  config.data = data;
+  return this.request(config);
+}
+
+Axios.prototype.upload = function upload(url, data = {}, config={}){
+  config.method = 'UPLOAD';
+  config.url = url;
+  config.data = data;
+  return this.request(config);
 }
 export default Axios;
